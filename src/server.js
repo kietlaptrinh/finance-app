@@ -25,9 +25,29 @@ app.use('/api/currency', require('./routes/currencyRoutes'));
 app.use('/api/settings', require('./routes/settingRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 // Đồng bộ database
-db.sequelize.sync({ alter: true }).then(() => {
-    app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+// db.sequelize.sync({ alter: true }).then(() => {
+//     app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+//     console.log('Database synced successfully with models.');
+// }).catch(err => {
+//     console.error('Unable to connect or sync the database:', err);
+// });
+
+async function startServer() {
+  try {
+    // Kết nối và đồng bộ cơ sở dữ liệu
+    await db.sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+    
+    // Đồng bộ các bảng với tùy chọn alter: true
+    await db.sequelize.sync({ alter: true });
     console.log('Database synced successfully with models.');
-}).catch(err => {
-    console.error('Unable to connect or sync the database:', err);
-});
+    
+    // Khởi động máy chủ sau khi đồng bộ thành công
+    app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+  } catch (error) {
+    console.error('Unable to connect or sync the database:', error);
+    process.exit(1); // Thoát nếu có lỗi
+  }
+}
+
+startServer();
