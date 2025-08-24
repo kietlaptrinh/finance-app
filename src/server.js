@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const db = require('../models');
+const db = require('./src/models');
 require('./utils/cronJob');
 
 const academicSyncService = require('./services/academicSyncService');
