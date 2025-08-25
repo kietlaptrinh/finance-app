@@ -1,4 +1,4 @@
-const { UserSetting, Category, User, UserChallenge, Challenge, BudgetRule, Transaction, Leaderboard, LeaderboardHistory } = require('../models');
+const { UserSetting, Category, User, UserChallenge, Challenge, BudgetRule, Transaction, Leaderboard, LeaderboardHistory, Budget } = require('../models');
 const { Op } = require('sequelize');
 const cron = require('node-cron');
 
@@ -133,7 +133,7 @@ const convertPointsToBalance = async (userId, points) => {
   if (setting.points < points) {
     throw new Error('Không đủ điểm để quy đổi');
   }
-  const amount = (points / 100) * 10000; // 100 điểm = 10.000 VND
+  const amount = (points / 100) * 1; 
   const newPoints = setting.points - points;
 
   // Tìm danh mục mặc định "Thu nhập" hoặc tạo mới nếu chưa có
@@ -156,8 +156,22 @@ const convertPointsToBalance = async (userId, points) => {
     amount,
     transactionDate: new Date(),
     type: 'income',
-    note: `Quy đổi ${points} điểm thành ${amount} VND`
+    note: `Redeemed ${points} points for ${amount.toFixed(2)} AUD`
   });
+
+  const pointHarvestBudget = await Budget.findOne({
+        where: {
+            userId,
+            period: 'points_harvest'
+        }
+    });
+
+    if (pointHarvestBudget) {
+        const currentBudgetAmount = parseFloat(pointHarvestBudget.amount) || 0;
+        const newBudgetAmount = currentBudgetAmount + amount;
+        await pointHarvestBudget.update({ amount: newBudgetAmount });
+        console.log(`Updated 'points_harvest' budget ${pointHarvestBudget.budgetId} with new amount: ${newBudgetAmount}`);
+    }
 
   // Cập nhật điểm
   await setting.update({ points: newPoints });

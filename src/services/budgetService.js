@@ -1,5 +1,6 @@
 const { Budget, Category } = require('../models');
 
+
 const createBudget = async (userId, data) => {
   const { categoryId, amount, period, startDate, endDate } = data;
   const category = await Category.findOne({ where: { categoryId, userId } }); // Chỉ category của user

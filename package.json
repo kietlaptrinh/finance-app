@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "NODE_ENV=development node src/server.js",
+    "dev": "NODE_ENV=development node src/server.js",
     "makemigrations": "npx sequelize-mig migration:make"
   },
   "keywords": [],
@@ -18,6 +18,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "firebase-admin": "^13.4.0",
+    "googleapis": "^157.0.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.3",
     "node-cron": "^4.2.1",

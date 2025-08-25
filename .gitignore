@@ -1,2 +1,4 @@
 /node_modules
 .env
+.env.development
+finance-app-3b4ba-firebase-adminsdk-fbsvc-3cf6fb5268.json

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         comment: 'Số tiền sau khi áp dụng quy tắc tự động'
     },
-    period: { type: DataTypes.ENUM('monthly', 'weekly', 'yearly'), defaultValue: 'monthly' },
+    period: { type: DataTypes.ENUM('monthly', 'weekly', 'yearly', 'points_harvest'), defaultValue: 'monthly' },
     startDate: { type: DataTypes.DATEONLY, allowNull: false, field: 'start_date' },
     endDate: { type: DataTypes.DATEONLY, allowNull: false, field: 'end_date' }
   }, {

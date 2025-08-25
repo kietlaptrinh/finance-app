@@ -37,6 +37,18 @@ const getDashboardSummary = async (userId, month, year) => {
 
     // Tính tiến độ ngân sách (đọc adjustedAmount)
     const budgetProgress = budgets.map((b) => {
+
+
+      if (b.period === 'points_harvest') {
+            // Đối với ngân sách thu thập, "spent" không có ý nghĩa,
+            // "amount" chính là tổng số tiền đã thu thập được.
+            return {
+                budgetId: b.budgetId,
+                categoryName: b.Category?.name || 'Thu thập Điểm thưởng',
+                isHarvestBudget: true, // Thêm một cờ để frontend nhận biết
+                harvestedAmount: parseFloat(b.amount),
+            };
+        }
         const spent = transactions
             .filter((t) => t.type === 'expense' && t.categoryId === b.categoryId)
             .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
@@ -47,6 +59,7 @@ const getDashboardSummary = async (userId, month, year) => {
         return {
             budgetId: b.budgetId,
             categoryName: b.Category?.name, // Lấy tên category nếu có include
+            isHarvestBudget: false,
             amount: parseFloat(b.amount),
             adjustedAmount: isAdjusted ? parseFloat(b.adjustedAmount) : null,
             spent,
