@@ -1,5 +1,6 @@
-// backend/config/config.js
-require('dotenv').config(); // Nạp các biến môi trường từ file .env
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'development' ? '.env.development' : '.env'
+});
 
 module.exports = {
   development: {

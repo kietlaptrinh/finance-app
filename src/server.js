@@ -1,7 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-const db = require('../models');
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'development' ? '.env.development' : '.env'
+});
+
+const db = require('./models');
 require('./utils/cronJob');
 
 const academicSyncService = require('./services/academicSyncService');
