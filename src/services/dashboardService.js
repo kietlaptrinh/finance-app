@@ -11,7 +11,13 @@ const getDashboardSummary = async (userId, month, year) => {
         include: [{ model: Category, attributes: ['categoryId', 'name'] }],
     });
     
-    const budgets = await Budget.findAll({ where: { userId } });
+    const budgets = await Budget.findAll({
+        where: { userId },
+        include: [{
+            model: Category,
+            attributes: ['name'] 
+        }]
+    });
     const goals = await SavingGoal.findAll({ where: { userId } });
     
     // <<< LOGIC ĐIỀU CHỈNH NGÂN SÁCH TỪ ACADEMIC SYNC >>>
